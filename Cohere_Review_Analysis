@@ -1,0 +1,72 @@
+import cohere
+from cohere.responses.classify import Example
+
+# Your Cohere API key
+co = cohere.Client('API KEY')
+
+# Input reviews
+inputs = [
+    "Good product, mild taste and dissolves better in smoothie machine",
+    "Product arrived well packaged and timely. I've only just started using this product. Seller is top-notch.",
+    "When I add a small scoop of this to my morning smoothie, I feel great all day. I feel like I'm 20 years younger.",
+    "This item broke after 3 weeks", 
+    "I bought the dulaliella salina from this seller, which I take every day. I think it's great. When I bought that product there was a sheet of paper in the package explaining the amazing benefits of coffee fruit extract. I bought it excited for all the benefits. Unfortunately, it didn't work for me. I haven't experienced any of the 'benefits' that this supplement claims to give. I bought it for brain health (focus and brain fog) and for increasing energy, I took 1000mg which is a high dose consistently for 8 days. It did nothing for me Such a shame as this supplement was quite expensive, for that price, I thought I would at least experience some sort of benefit from taking it.",
+    "This magic powder is truly amazing! I sipped it down in some tea and soon after felt the effects of what one would feel if they microdosed on magic mushrooms. This powder is so many things but one thing that stood out most (the first day I tried it) was I felt more enthused and inspired than I’ve felt in a while. It was just the pick-me-up I needed which, ironically, I felt more grounded and clearer on things as well! So happy to have found it! Really love the taste as well. And Duncan, the seller is truly a gem! He’s so helpful. And offers true value on more than just what he offers here. This one was so good, I sent some to my mom and immediately re-purchased double the amount for myself.",
+    "Thanks for getting back to me so quickly",
+    "Really good quality product, will purchase again.",
+    "Simply the best coffee fruit extract powder around. Thankful to continue buying from this seller.",
+    "GREAT quality! Item is as described/displayed. The item met my expectations and I shall buy again once I have finished this pack.",
+    "I can feel the effects of it almost instantly, I can tell you it works from experience.",
+    "Excellent product that fills me with energy every morning. I have repeated the order.",
+]
+
+# Example classifications for training
+examples = [
+    Example("The order came 5 days early", "positive"),
+    Example("The quality of product is amazing", "positive"),
+    Example("The product justifies its price", "positive"),
+    Example("Value for product", "positive"),
+    Example("This brand is amazing", "positive"),
+    Example("This is a truly amazing product and brand, I will recommend this to other", "positive"),
+    Example("The item exceeded my expectations", "positive"),
+    Example("I ordered more for my friends", "positive"),
+    Example("I would buy this again", "positive"),
+    Example("I would recommend this to others", "positive"),
+    Example("The shipping was incredibly fast", "positive"),
+    Example("The quality of the product is outstanding", "positive"),
+    Example("This exceeded my expectations, highly recommended", "positive"),
+    Example("I'm very satisfied with my purchase", "positive"),
+    Example("The customer service was responsive and helpful", "positive"),
+    Example("The package was damaged", "negative"),
+    Example("The order is 5 days late", "negative"),
+    Example("The order was incorrect", "negative"),
+    Example("I want to return my item", "negative"),
+    Example("The item's material feels low quality", "negative"),
+    Example("Unfortunately, it didn't work for me", "negative"),
+    Example("I haven't experienced any of the 'benefits' that this supplement claims to give", "negative"),
+    Example("The product arrived damaged", "negative"),
+    Example("I received the wrong item in my order", "negative"),
+    Example("The shipping was delayed and frustrating", "negative"),
+    Example("Poor customer service, they didn't address my issue", "negative"),
+    Example("This product did not meet my expectations", "negative"),
+    Example("The item's description was misleading", "negative"),
+    Example("I'm disappointed with the lack of results from this supplement", "negative"),
+    Example("It's not worth the price, very overpriced", "negative")
+
+]
+
+
+
+# Classify the input reviews
+classifications = co.classify(model='embed-english-v3.0', inputs=inputs, examples=examples)
+
+# Print clear results in the terminal
+for index, classification in enumerate(classifications):
+    review_label = classification.predictions
+    confidence = classification.confidences
+    print(f"Review {index + 1} Classification: {review_label} with confidence {confidence}")
+
+
+
+
+
